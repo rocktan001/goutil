@@ -9,6 +9,9 @@ import (
     "github.com/go-redis/redis"
 )
 
+func Version() string {
+    return "v1.3.0"
+}
 func Contain(obj interface{}, target interface{}) (bool, error) {
     targetValue := reflect.ValueOf(target)
     switch reflect.TypeOf(target).Kind() {
