@@ -19,6 +19,6 @@ func TestRedis_json_set(t *testing.T) {
 	Redis_json_set("hello", "hello")
 }
 
-// func TestRedis_json_get(t *testing.T) {
-// 	fmt.Println(Redis_json_get("hello"))
-// }
+func TestRedis_json_get(t *testing.T) {
+	fmt.Println(Redis_json_get("hello"))
+}

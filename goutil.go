@@ -47,16 +47,16 @@ func Redis_json_set(key string, obj interface{}) {
     client.Set(key, obj, 30*time.Second)
 }
 
-// func Redis_json_get(key string) string {
-//     client := redis.NewClient(&redis.Options{
-//         Addr:     "www.rocktan001.com:6379",
-//         Password: "F96AEB124C", // no password set
-//         DB:       0,            // use default DB
-//     })
-//     defer client.Close()
-//     val, err := client.Get(key).Result()
-//     if err != nil {
-//         panic(err)
-//     }
-//     return val
-// }
+func Redis_json_get(key string) string {
+    client := redis.NewClient(&redis.Options{
+        Addr:     "www.rocktan001.com:6379",
+        Password: "F96AEB124C", // no password set
+        DB:       0,            // use default DB
+    })
+    defer client.Close()
+    val, err := client.Get(key).Result()
+    if err != nil {
+        panic(err)
+    }
+    return val
+}
