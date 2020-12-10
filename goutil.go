@@ -10,7 +10,7 @@ import (
 )
 
 func Version() string {
-    return "v1.4.0"
+    return "v1.5.0"
 }
 func Contain(obj interface{}, target interface{}) (bool, error) {
     targetValue := reflect.ValueOf(target)
@@ -48,7 +48,14 @@ func Redis_json_set(key string, obj interface{}) {
     })
     defer client.Close()
     // client.Set(key, obj, 30*time.Second)
-    client.Set(key, obj, -1)
+    if _, err := client.Ping().Result(); err != nil {
+        panic(err)
+    }
+
+    err := client.Set(key, obj, -1).Err()
+    if err != nil {
+        panic(err)
+    }
 }
 
 func Redis_json_get(key string) string {
