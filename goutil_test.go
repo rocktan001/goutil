@@ -22,6 +22,10 @@ func TestRedis_json_set(t *testing.T) {
 func TestRedis_json_get(t *testing.T) {
 	fmt.Println(Redis_json_get("hello"))
 }
+
+func TestRandSeq(t *testing.T) {
+	fmt.Println(RandSeq(15))
+}
 func TestVersion(t *testing.T) {
 	fmt.Println(Version())
 }

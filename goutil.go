@@ -10,7 +10,7 @@ import (
 )
 
 func Version() string {
-    return "v1.5.0"
+    return "v1.5.1"
 }
 func Contain(obj interface{}, target interface{}) (bool, error) {
     targetValue := reflect.ValueOf(target)
@@ -40,6 +40,15 @@ func RandNumberString(length int) string {
     return string(b)
 }
 
+func RandSeq(length int) string {
+    var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    rand.Seed(time.Now().UnixNano())
+    b := make([]rune, length)
+    for i := range b {
+        b[i] = letterRunes[rand.Intn(len(letterRunes))]
+    }
+    return string(b)
+}
 func Redis_json_set(key string, obj interface{}) {
     client := redis.NewClient(&redis.Options{
         Addr:     "www.rocktan001.com:6379",
