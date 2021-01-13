@@ -10,7 +10,7 @@ import (
 )
 
 func Version() string {
-    return "v1.5.1"
+    return "v1.6.0"
 }
 func Contain(obj interface{}, target interface{}) (bool, error) {
     targetValue := reflect.ValueOf(target)
@@ -74,9 +74,81 @@ func Redis_json_get(key string) string {
         DB:       0,            // use default DB
     })
     defer client.Close()
+    if _, err := client.Ping().Result(); err != nil {
+        panic(err)
+    }
+
     val, err := client.Get(key).Result()
     if err != nil {
         panic(err)
     }
     return val
+}
+
+func Redis_json_pub(key string, obj interface{}) {
+    client := redis.NewClient(&redis.Options{
+        Addr:     "www.rocktan001.com:6379",
+        Password: "F96AEB124C", // no password set
+        DB:       0,            // use default DB
+    })
+    defer client.Close()
+    if _, err := client.Ping().Result(); err != nil {
+        panic(err)
+    }
+
+    if err := client.Publish(key, obj).Err(); err != nil {
+        panic(err)
+    }
+
+}
+
+func Redis_json_sub(key string) string {
+    // var message *redis.Message
+    client := redis.NewClient(&redis.Options{
+        Addr:     "www.rocktan001.com:6379",
+        Password: "F96AEB124C", // no password set
+        DB:       0,            // use default DB
+    })
+    defer client.Close()
+    // go func() {
+    //     for {
+
+    //         _, err := client.Ping().Result()
+    //         if err != nil {
+    //             panic(err)
+    //         }
+    //         // fmt.Println(result, " ", time.Now().Format("2006-01-02 15:04:05"))
+    //         time.Sleep(5 * time.Second)
+    //     }
+    // }()
+    sub := client.Subscribe(key)
+    iface, err := sub.Receive()
+    if err != nil {
+        // handle error
+        panic(err)
+    }
+
+    // Should be *Subscription, but others are possible if other actions have been
+    // taken on sub since it was created.
+    switch iface.(type) {
+    case *redis.Subscription:
+        // fmt.Println("Subscription")
+    case *redis.Message:
+        // received first message
+        // fmt.Println("Message")
+    case *redis.Pong:
+        // pong received
+        // fmt.Println("Pong")
+    default:
+        // handle error
+    }
+
+    ch := sub.Channel()
+    // fmt.Println(ch)
+    for msg := range ch {
+        // message = msg
+        // fmt.Println(msg.Channel, ":", msg.Payload)
+        return msg.Payload
+    }
+    return "error"
 }
