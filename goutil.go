@@ -110,17 +110,9 @@ func Redis_json_sub(key string) string {
         DB:       0,            // use default DB
     })
     defer client.Close()
-    // go func() {
-    //     for {
-
-    //         _, err := client.Ping().Result()
-    //         if err != nil {
-    //             panic(err)
-    //         }
-    //         // fmt.Println(result, " ", time.Now().Format("2006-01-02 15:04:05"))
-    //         time.Sleep(5 * time.Second)
-    //     }
-    // }()
+    if _, err := client.Ping().Result(); err != nil {
+        panic(err)
+    }
     sub := client.Subscribe(key)
     iface, err := sub.Receive()
     if err != nil {
