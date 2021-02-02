@@ -29,3 +29,13 @@ func TestRandSeq(t *testing.T) {
 func TestVersion(t *testing.T) {
 	fmt.Println(Version())
 }
+func TestGetPhysicalID(t *testing.T) {
+	fmt.Println(GetPhysicalID())
+}
+
+func TestRedis_Set(t *testing.T) {
+	Redis_json_SAdd("online", GetPhysicalID())
+	fmt.Println(Redis_json_SMembers("online"))
+	Redis_json_SRem("online", GetPhysicalID())
+	fmt.Println(Redis_json_SMembers("online"))
+}

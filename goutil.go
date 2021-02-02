@@ -10,7 +10,7 @@ import (
 )
 
 func Version() string {
-    return "v1.6.0"
+    return "v1.6.2"
 }
 func Contain(obj interface{}, target interface{}) (bool, error) {
     targetValue := reflect.ValueOf(target)
@@ -83,6 +83,58 @@ func Redis_json_get(key string) string {
         panic(err)
     }
     return val
+}
+
+func Redis_json_SAdd(key, value string) {
+    client := redis.NewClient(&redis.Options{
+        Addr:     "www.rocktan001.com:6379",
+        Password: "F96AEB124C", // no password set
+        DB:       0,            // use default DB
+    })
+    defer client.Close()
+    if _, err := client.Ping().Result(); err != nil {
+        panic(err)
+    }
+
+    err := client.SAdd(key, value).Err()
+    if err != nil {
+        panic(err)
+    }
+
+}
+
+func Redis_json_SRem(key, value string) {
+    client := redis.NewClient(&redis.Options{
+        Addr:     "www.rocktan001.com:6379",
+        Password: "F96AEB124C", // no password set
+        DB:       0,            // use default DB
+    })
+    defer client.Close()
+    if _, err := client.Ping().Result(); err != nil {
+        panic(err)
+    }
+
+    err := client.SRem(key, value).Err()
+    if err != nil {
+        panic(err)
+    }
+
+}
+
+func Redis_json_SMembers(key string) []string {
+    client := redis.NewClient(&redis.Options{
+        Addr:     "www.rocktan001.com:6379",
+        Password: "F96AEB124C", // no password set
+        DB:       0,            // use default DB
+    })
+    defer client.Close()
+    if _, err := client.Ping().Result(); err != nil {
+        panic(err)
+    }
+
+    es, _ := client.SMembers(key).Result()
+    return es
+
 }
 
 func Redis_json_pub(key string, obj interface{}) {
